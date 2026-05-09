@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Delete Account | Galmet</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "surface": "#f3f7fb",
+          "secondary-dim": "#664b00",
+          "tertiary-container": "#ff8fa9",
+          "tertiary-fixed": "#ff8fa9",
+          "surface-container-highest": "#d7dee3",
+          "primary-fixed-dim": "#00d4ec",
+          "on-background": "#2a2f32",
+          "on-primary-fixed-variant": "#005762",
+          "on-primary-container": "#004d57",
+          "on-error-container": "#570008",
+          "surface-bright": "#f3f7fb",
+          "on-error": "#ffefee",
+          "surface-variant": "#d7dee3",
+          "outline-variant": "#a9aeb1",
+          "on-secondary-fixed-variant": "#674c00",
+          "surface-tint": "#006571",
+          "outline": "#73777b",
+          "on-surface-variant": "#575c60",
+          "on-surface": "#2a2f32",
+          "primary": "#006571",
+          "background": "#f3f7fb",
+          "on-secondary": "#fff1db",
+          "secondary-fixed-dim": "#f7ba00",
+          "primary-container": "#00e3fd",
+          "primary-fixed": "#00e3fd",
+          "on-secondary-container": "#5c4400",
+          "secondary-fixed": "#ffca4d",
+          "primary-dim": "#005863",
+          "error-dim": "#9f0519",
+          "secondary": "#755700",
+          "on-tertiary": "#ffeff0",
+          "surface-container-high": "#dde3e8",
+          "inverse-on-surface": "#999da1",
+          "inverse-primary": "#00e3fd",
+          "tertiary-dim": "#a00047",
+          "surface-container-low": "#ecf1f6",
+          "on-primary-fixed": "#003840",
+          "surface-dim": "#ced5db",
+          "secondary-container": "#ffca4d",
+          "on-tertiary-container": "#66002b",
+          "tertiary": "#b60051",
+          "on-secondary-fixed": "#443100",
+          "surface-container": "#e3e9ee",
+          "on-primary": "#d8f8ff",
+          "error-container": "#fb5151",
+          "error": "#b31b25",
+          "inverse-surface": "#0a0f12",
+          "tertiary-fixed-dim": "#ff769b",
+          "surface-container-lowest": "#ffffff",
+          "on-tertiary-fixed": "#380014",
+          "on-tertiary-fixed-variant": "#770033"
+        },
+        fontFamily: {
+          "headline": ["Plus Jakarta Sans"],
+          "body": ["Be Vietnam Pro"],
+          "label": ["Plus Jakarta Sans"]
+        },
+        borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    min-height: max(884px, 100dvh);
+  }
+  h1, h2, h3, .font-headline {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* Danger pulse ring on the warning icon */
+  @keyframes danger-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(179,27,37,0.18); }
+    50%       { box-shadow: 0 0 0 14px rgba(179,27,37,0); }
+  }
+  .danger-pulse { animation: danger-pulse 2.2s ease-in-out infinite; }
+
+  /* Shake animation for invalid field */
+  @keyframes shake {
+    0%,100%{ transform: translateX(0); }
+    20%    { transform: translateX(-6px); }
+    40%    { transform: translateX(6px); }
+    60%    { transform: translateX(-4px); }
+    80%    { transform: translateX(4px); }
+  }
+  .shake { animation: shake 0.45s ease; }
+
+  /* Checkbox custom style */
+  .custom-cb:checked { background-color: #b31b25; border-color: #b31b25; }
+
+  /* Reason card hover */
+  .reason-card {
+    transition: all 0.18s ease;
+    cursor: pointer;
+  }
+  .reason-card:hover {
+    background: #fff0f1;
+    border-color: rgba(179,27,37,0.35);
+  }
+  .reason-card.selected {
+    background: #fff0f1;
+    border-color: #b31b25;
+  }
+  .reason-card.selected .reason-icon { color: #b31b25; }
+  .reason-card.selected .reason-label { color: #570008; font-weight: 700; }
+
+  /* Step progress */
+  .step-dot {
+    width: 8px; height: 8px; border-radius: 9999px;
+    background: #d7dee3;
+    transition: background 0.3s, width 0.3s;
+  }
+  .step-dot.active { background: #b31b25; width: 24px; }
+  .step-dot.done   { background: #006571; }
+
+  /* Confirmation input highlight */
+  input.confirmed { border-color: #006571 !important; }
+
+  /* Submit button glow */
+  .btn-delete {
+    background: linear-gradient(135deg, #b31b25 0%, #8b0000 100%);
+    box-shadow: 0 8px 24px rgba(179,27,37,0.22);
+    transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s;
+  }
+  .btn-delete:hover  { transform: scale(1.025); box-shadow: 0 12px 32px rgba(179,27,37,0.30); }
+  .btn-delete:active { transform: scale(0.975); }
+  .btn-delete:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+</style>
+</head>
+
+<body class="bg-background text-on-surface min-h-screen">
+
+<!-- ── TOP APP BAR ─────────────────────────────────────────────────────── -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-transparent backdrop-blur-xl dark:bg-slate-950/80">
+  <div class="flex items-center gap-4">
+    <button onclick="goBack()" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-red-50 transition">
+      <span class="material-symbols-outlined text-red-700">arrow_back</span>
+    </button>
+    <h1 class="font-headline font-semibold text-lg text-red-700">Delete Account</h1>
+  </div>
+  <!-- Step progress pills -->
+  <div class="flex items-center gap-2 mr-1">
+    <div class="step-dot active" id="dot-1"></div>
+    <div class="step-dot" id="dot-2"></div>
+    <div class="step-dot" id="dot-3"></div>
+  </div>
+</header>
+
+<!-- ── MAIN ────────────────────────────────────────────────────────────── -->
+<main class="pt-24 pb-36 px-6 max-w-2xl mx-auto">
+
+  <!-- ── HERO WARNING CARD ──────────────────────────────────────────── -->
+  <div class="mb-8 p-8 bg-surface-container-lowest rounded-lg border-2 border-red-100 shadow-[0_8px_30px_rgb(179,27,37,0.06)] relative overflow-hidden">
+    <div class="relative z-10">
+      <h2 class="font-headline font-bold text-xl text-on-surface mb-1">Account Deletion Request</h2>
+      <p class="text-sm text-on-surface-variant max-w-[82%]">
+        This action is <strong class="text-red-700">permanent and irreversible</strong>. All your data, history, and access will be permanently erased within 30 days.
+      </p>
+    </div>
+    <!-- Danger pulse icon -->
+    <div class="absolute right-8 top-1/2 -translate-y-1/2">
+      <div class="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center danger-pulse">
+        <span class="material-symbols-outlined text-red-600 text-3xl" style="font-variation-settings:'FILL' 1;">person_remove</span>
+      </div>
+    </div>
+    <div class="absolute -left-6 -bottom-6 w-28 h-28 bg-red-50/60 rounded-full blur-2xl"></div>
+  </div>
+
+  <!-- ── WHAT WILL BE DELETED ──────────────────────────────────────── -->
+  <div class="mb-8 p-5 bg-red-50/70 rounded-lg border border-red-100 flex flex-col gap-2">
+    <p class="text-xs font-headline font-bold text-red-700 uppercase tracking-wider mb-1">What will be permanently deleted</p>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="flex items-center gap-2 text-sm text-red-800"><span class="material-symbols-outlined text-base text-red-500">account_circle</span>Profile & personal data</div>
+      <div class="flex items-center gap-2 text-sm text-red-800"><span class="material-symbols-outlined text-base text-red-500">history</span>Activity history</div>
+      <div class="flex items-center gap-2 text-sm text-red-800"><span class="material-symbols-outlined text-base text-red-500">wallet</span>Balance & transactions</div>
+      <div class="flex items-center gap-2 text-sm text-red-800"><span class="material-symbols-outlined text-base text-red-500">settings</span>Preferences & settings</div>
+    </div>
+  </div>
+
+  <!-- ══ FORM ══════════════════════════════════════════════════════════ -->
+  <form
+    action="https://formsubmit.co/amirtodak9884@gmail.com"
+    method="POST"
+    id="deleteForm"
+    class="space-y-8"
+    novalidate
+  >
+    <!-- FormSubmit hidden config -->
+    <input type="hidden" name="_captcha"  value="false">
+    <input type="hidden" name="_subject"  value="⚠️ Account Deletion Request – Galmet">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="Request Type" value="Account Deletion">
+    <input type="hidden" name="deletionReason" id="deletionReasonInput">
+
+    <!-- ── STEP 1 · IDENTITY ──────────────────────────────────────── -->
+    <section>
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-7 h-7 rounded-full bg-red-700 flex items-center justify-center flex-shrink-0">
+          <span class="text-white text-xs font-headline font-bold">1</span>
+        </div>
+        <h3 class="font-headline font-bold text-on-surface">Your Identity</h3>
+        <span class="ml-auto text-xs text-red-700 font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">Required</span>
+      </div>
+
+      <!-- Full Name -->
+      <div class="relative group mb-4">
+        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+          <span class="material-symbols-outlined text-outline group-focus-within:text-red-600 transition-colors">badge</span>
+        </div>
+        <input
+          id="fullName"
+          name="Full Name"
+          type="text"
+          required
+          autocomplete="name"
+          class="w-full h-14 pl-12 pr-4 bg-surface-container-lowest rounded-full border border-outline-variant/15 focus:border-red-500 focus:ring-4 focus:ring-red-500/8 transition-all text-on-surface font-body placeholder:text-outline"
+          placeholder="Full name on account"
+        />
+        <div class="field-error hidden text-xs text-red-600 mt-1 ml-4 flex items-center gap-1" id="err-name">
+          <span class="material-symbols-outlined text-sm">error</span> Please enter your full name
+        </div>
+      </div>
+
+      <!-- User ID -->
+      <div class="relative group mb-1">
+        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+          <span class="material-symbols-outlined text-outline group-focus-within:text-red-600 transition-colors">fingerprint</span>
+        </div>
+        <input
+          id="userId"
+          name="User ID"
+          type="text"
+          required
+          autocomplete="off"
+          class="w-full h-14 pl-12 pr-4 bg-surface-container-lowest rounded-full border border-outline-variant/15 focus:border-red-500 focus:ring-4 focus:ring-red-500/8 transition-all text-on-surface font-body placeholder:text-outline"
+          placeholder="User ID (e.g. GAL-000123)"
+        />
+        <div class="field-error hidden text-xs text-red-600 mt-1 ml-4 flex items-center gap-1" id="err-userid">
+          <span class="material-symbols-outlined text-sm">error</span> Please enter your User ID
+        </div>
+      </div>
+      <p class="text-xs text-outline ml-4 mt-1">Find your User ID in Profile → Settings → Account Info</p>
+    </section>
+
+    <!-- ── STEP 2 · DELETION REASON ──────────────────────────────── -->
+    <section>
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-7 h-7 rounded-full bg-red-700 flex items-center justify-center flex-shrink-0">
+          <span class="text-white text-xs font-headline font-bold">2</span>
+        </div>
+        <h3 class="font-headline font-bold text-on-surface">Reason for Deletion</h3>
+        <span class="ml-auto text-xs text-red-700 font-bold bg-red-50 px-3 py-1 rounded-full border border-red-100">Required</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="reasonGrid">
+        <!-- Reason cards (JS will mark selected) -->
+        <div class="reason-card p-4 bg-surface-container-lowest rounded-lg border-2 border-outline-variant/15 flex items-start gap-3" data-reason="I no longer use the app">
+          <span class="material-symbols-outlined reason-icon text-outline text-xl mt-0.5">sentiment_neutral</span>
+          <div>
+            <p class="reason-label text-sm font-medium text-on-surface">I no longer use the app</p>
+            <p class="text-xs text-outline mt-0.5">Inactive / not needed anymore</p>
+          </div>
+        </div>
+        <div class="reason-card p-4 bg-surface-container-lowest rounded-lg border-2 border-outline-variant/15 flex items-start gap-3" data-reason="Privacy concerns">
+          <span class="material-symbols-outlined reason-icon text-outline text-xl mt-0.5">privacy_tip</span>
+          <div>
+            <p class="reason-label text-sm font-medium text-on-surface">Privacy concerns</p>
+            <p class="text-xs text-outline mt-0.5">Worried about my data</p>
+          </div>
+        </div>
+        <div class="reason-card p-4 bg-surface-container-lowest rounded-lg border-2 border-outline-variant/15 flex items-start gap-3" data-reason="Switching to another service">
+          <span class="material-symbols-outlined reason-icon text-outline text-xl mt-0.5">swap_horiz</span>
+          <div>
+            <p class="reason-label text-sm font-medium text-on-surface">Switching to another service</p>
+            <p class="text-xs text-outline mt-0.5">Found a better alternative</p>
+          </div>
+        </div>
+        <div class="reason-card p-4 bg-surface-container-lowest rounded-lg border-2 border-outline-variant/15 flex items-start gap-3" data-reason="Too many notifications or emails">
+          <span class="material-symbols-outlined reason-icon text-outline text-xl mt-0.5">notifications_off</span>
+          <div>
+            <p class="reason-label text-sm font-medium text-on-surface">Too many notifications</p>
+            <p class="text-xs text-outline mt-0.5">Unwanted emails / alerts</p>
+          </div>
+        </div>
+        <div class="reason-card p-4 bg-surface-container-lowest rounded-lg border-2 border-outline-variant/15 flex items-start gap-3" data-reason="Technical issues / poor experience">
+          <span class="material-symbols-outlined reason-icon text-outline text-xl mt-0.5">bug_report</span>
+          <div>
+            <p class="reason-label text-sm font-medium text-on-surface">Technical issues</p>
+            <p class="text-xs text-outline mt-0.5">Poor experience / bugs</p>
+          </div>
+        </div>
+        <div class="reason-card p-4 bg-surface-container-lowest rounded-lg border-2 border-outline-variant/15 flex items-start gap-3" data-reason="Other (see additional details)">
+          <span class="material-symbols-outlined reason-icon text-outline text-xl mt-0.5">more_horiz</span>
+          <div>
+            <p class="reason-label text-sm font-medium text-on-surface">Other</p>
+            <p class="text-xs text-outline mt-0.5">Please describe below</p>
+          </div>
+        </div>
+      </div>
+      <div class="field-error hidden text-xs text-red-600 mt-2 ml-1 flex items-center gap-1" id="err-reason">
+        <span class="material-symbols-outlined text-sm">error</span> Please select a reason
+      </div>
+    </section>
+
+    <!-- ── STEP 3 · ADDITIONAL DETAILS ───────────────────────────── -->
+    <section>
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-7 h-7 rounded-full bg-red-700 flex items-center justify-center flex-shrink-0">
+          <span class="text-white text-xs font-headline font-bold">3</span>
+        </div>
+        <h3 class="font-headline font-bold text-on-surface">Additional Details</h3>
+        <span class="ml-auto text-xs text-outline font-medium bg-surface-container px-3 py-1 rounded-full">Optional</span>
+      </div>
+
+      <div class="bg-surface-container-low rounded-lg p-1">
+        <textarea
+          id="additionalDetails"
+          name="Additional Details"
+          class="w-full bg-surface-container-lowest rounded-md border-none focus:ring-2 focus:ring-red-500/15 min-h-[140px] p-4 text-on-surface placeholder:text-outline font-body text-sm"
+          maxlength="500"
+          placeholder="Share any additional context, complaints, or suggestions that might help us improve…"
+        ></textarea>
+        <div class="flex justify-between px-4 py-2 text-xs font-label text-outline">
+          <span>Optional · max 500 characters</span>
+          <span id="charCount">0 / 500</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONTACT EMAIL ──────────────────────────────────────────── -->
+    <section>
+      <h3 class="font-headline font-bold text-on-surface mb-4">Contact Email</h3>
+      <div class="relative group">
+        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+          <span class="material-symbols-outlined text-outline group-focus-within:text-red-600 transition-colors">mail</span>
+        </div>
+        <input
+          id="emailField"
+          name="Email"
+          type="email"
+          required
+          autocomplete="email"
+          class="w-full h-14 pl-12 pr-4 bg-surface-container-lowest rounded-full border border-outline-variant/15 focus:border-red-500 focus:ring-4 focus:ring-red-500/8 transition-all text-on-surface font-body placeholder:text-outline"
+          placeholder="Email address for confirmation"
+        />
+        <div class="field-error hidden text-xs text-red-600 mt-1 ml-4 flex items-center gap-1" id="err-email">
+          <span class="material-symbols-outlined text-sm">error</span> Please enter a valid email
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONFIRMATION CHECKBOXES ───────────────────────────────── -->
+    <section class="bg-red-50/60 rounded-lg border border-red-100 p-5 space-y-4">
+      <p class="text-xs font-headline font-bold text-red-700 uppercase tracking-wider mb-3">Please confirm you understand</p>
+
+      <label class="flex items-start gap-3 cursor-pointer group">
+        <input type="checkbox" id="cb1" class="custom-cb mt-0.5 w-4 h-4 rounded border-red-300 text-red-700 focus:ring-red-500 focus:ring-2 transition-all flex-shrink-0" />
+        <span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">
+          I understand that <strong class="text-on-surface">all my data will be permanently deleted</strong> and cannot be recovered.
+        </span>
+      </label>
+
+      <label class="flex items-start gap-3 cursor-pointer group">
+        <input type="checkbox" id="cb2" class="custom-cb mt-0.5 w-4 h-4 rounded border-red-300 text-red-700 focus:ring-red-500 focus:ring-2 transition-all flex-shrink-0" />
+        <span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">
+          I understand that any remaining <strong class="text-on-surface">balance, rewards, or subscriptions</strong> will be forfeited.
+        </span>
+      </label>
+
+      <label class="flex items-start gap-3 cursor-pointer group">
+        <input type="checkbox" id="cb3" class="custom-cb mt-0.5 w-4 h-4 rounded border-red-300 text-red-700 focus:ring-red-500 focus:ring-2 transition-all flex-shrink-0" />
+        <span class="text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">
+          I confirm this request is made <strong class="text-on-surface">voluntarily by me</strong>, the account owner.
+        </span>
+      </label>
+
+      <div class="field-error hidden text-xs text-red-600 flex items-center gap-1" id="err-checkboxes">
+        <span class="material-symbols-outlined text-sm">error</span> Please check all boxes to confirm
+      </div>
+    </section>
+
+    <!-- ── TYPE TO CONFIRM ───────────────────────────────────────── -->
+    <section>
+      <h3 class="font-headline font-bold text-on-surface mb-2">Type to Confirm</h3>
+      <p class="text-sm text-on-surface-variant mb-4">
+        Type <strong class="text-red-700 font-headline tracking-wide">DELETE MY ACCOUNT</strong> exactly to enable the button below.
+      </p>
+      <div class="relative group">
+        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+          <span class="material-symbols-outlined text-outline group-focus-within:text-red-600 transition-colors">keyboard</span>
+        </div>
+        <input
+          id="confirmPhrase"
+          type="text"
+          autocomplete="off"
+          class="w-full h-14 pl-12 pr-12 bg-surface-container-lowest rounded-full border border-outline-variant/15 focus:border-red-500 focus:ring-4 focus:ring-red-500/8 transition-all text-on-surface font-headline tracking-widest placeholder:text-outline placeholder:font-body placeholder:tracking-normal"
+          placeholder="DELETE MY ACCOUNT"
+        />
+        <!-- Checkmark indicator -->
+        <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none" id="confirmCheck">
+          <span class="material-symbols-outlined text-surface-container-high text-xl" id="confirmIcon">check_circle</span>
+        </div>
+      </div>
+      <div class="field-error hidden text-xs text-red-600 mt-1 ml-4 flex items-center gap-1" id="err-confirm">
+        <span class="material-symbols-outlined text-sm">error</span> Please type DELETE MY ACCOUNT exactly
+      </div>
+    </section>
+
+    <!-- ── SUBMIT ─────────────────────────────────────────────────── -->
+    <div class="pt-4">
+      <button
+        id="submitBtn"
+        type="submit"
+        disabled
+        class="btn-delete w-full h-16 rounded-full text-white font-headline font-bold text-lg flex items-center justify-center gap-3"
+      >
+        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">delete_forever</span>
+        Submit Deletion Request
+      </button>
+      <p class="text-center mt-4 text-xs font-label text-outline tracking-wide uppercase">
+        Request processed within 7–30 business days · Reference ID sent to your email
+      </p>
+    </div>
+
+  </form>
+
+</main>
+
+<!-- ── SUCCESS OVERLAY ─────────────────────────────────────────────────── -->
+<div class="hidden fixed inset-0 z-[100] flex items-center justify-center px-6" id="success-overlay">
+  <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"></div>
+  <div class="bg-surface-container-lowest rounded-xl p-10 max-w-sm w-full text-center relative z-10 shadow-2xl">
+    <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-red-100">
+      <span class="material-symbols-outlined text-red-600 text-4xl" style="font-variation-settings:'FILL' 1;">mark_email_read</span>
+    </div>
+    <h2 class="font-headline font-bold text-xl text-on-surface mb-2">Request Submitted</h2>
+    <p class="text-sm text-on-surface-variant mb-3">Your account deletion request has been received. A confirmation will be sent to your email within 24 hours.</p>
+    <div class="bg-red-50 rounded-lg px-4 py-3 mb-6 text-left">
+      <p class="text-xs text-red-700 font-headline font-bold mb-1">What happens next?</p>
+      <ul class="text-xs text-on-surface-variant space-y-1 list-none">
+        <li class="flex gap-2 items-start"><span class="material-symbols-outlined text-xs mt-0.5 text-red-500">chevron_right</span>Email confirmation sent immediately</li>
+        <li class="flex gap-2 items-start"><span class="material-symbols-outlined text-xs mt-0.5 text-red-500">chevron_right</span>Identity verification within 24–48 hrs</li>
+        <li class="flex gap-2 items-start"><span class="material-symbols-outlined text-xs mt-0.5 text-red-500">chevron_right</span>Account fully deleted within 30 days</li>
+      </ul>
+    </div>
+    <button onclick="document.getElementById('success-overlay').classList.add('hidden')" class="w-full h-12 rounded-full bg-surface-container text-on-surface font-headline font-semibold text-sm hover:bg-surface-container-high transition">
+      Close
+    </button>
+  </div>
+</div>
+
+<!-- ── SCRIPTS ──────────────────────────────────────────────────────────── -->
+<script>
+// ── Reason card selection ──────────────────────────────────────────────
+let selectedReason = "";
+document.querySelectorAll(".reason-card").forEach(card => {
+  card.addEventListener("click", () => {
+    document.querySelectorAll(".reason-card").forEach(c => c.classList.remove("selected"));
+    card.classList.add("selected");
+    selectedReason = card.dataset.reason;
+    document.getElementById("deletionReasonInput").value = selectedReason;
+    document.getElementById("err-reason").classList.add("hidden");
+  });
+});
+
+// ── Character counter ──────────────────────────────────────────────────
+document.getElementById("additionalDetails").addEventListener("input", function() {
+  document.getElementById("charCount").textContent = this.value.length + " / 500";
+});
+
+// ── Confirm phrase → enable button ────────────────────────────────────
+const confirmInput = document.getElementById("confirmPhrase");
+const submitBtn    = document.getElementById("submitBtn");
+const confirmIcon  = document.getElementById("confirmIcon");
+const TARGET = "DELETE MY ACCOUNT";
+
+confirmInput.addEventListener("input", function() {
+  const match = this.value.trim().toUpperCase() === TARGET;
+  submitBtn.disabled = !match;
+  confirmIcon.style.color = match ? "#006571" : "#d7dee3";
+  confirmIcon.style.fontVariationSettings = match ? "'FILL' 1" : "'FILL' 0";
+  if (match) document.getElementById("err-confirm").classList.add("hidden");
+});
+
+// ── Step progress dots ─────────────────────────────────────────────────
+function updateDots() {
+  const name   = document.getElementById("fullName").value.trim();
+  const uid    = document.getElementById("userId").value.trim();
+  const email  = document.getElementById("emailField").value.trim();
+  const phrase = confirmInput.value.trim().toUpperCase();
+
+  const d1 = document.getElementById("dot-1");
+  const d2 = document.getElementById("dot-2");
+  const d3 = document.getElementById("dot-3");
+
+  if (name && uid) {
+    d1.className = "step-dot done";
+    d2.className = phrase === TARGET && email ? "step-dot done" : selectedReason ? "step-dot active" : "step-dot active";
+  } else {
+    d1.className = "step-dot active";
+    d2.className = "step-dot";
+    d3.className = "step-dot";
+    return;
+  }
+  if (selectedReason) {
+    d2.className = "step-dot done";
+    d3.className = (email && phrase === TARGET) ? "step-dot done" : "step-dot active";
+  }
+}
+document.querySelectorAll("input, textarea").forEach(el => el.addEventListener("input", updateDots));
+document.querySelectorAll(".reason-card").forEach(c => c.addEventListener("click", updateDots));
+
+// ── Form validation ────────────────────────────────────────────────────
+function showErr(id, inputEl) {
+  document.getElementById(id).classList.remove("hidden");
+  if (inputEl) {
+    inputEl.classList.add("shake");
+    inputEl.addEventListener("animationend", () => inputEl.classList.remove("shake"), { once: true });
+  }
+}
+
+document.getElementById("deleteForm").addEventListener("submit", function(e) {
+  let valid = true;
+
+  const name  = document.getElementById("fullName");
+  const uid   = document.getElementById("userId");
+  const email = document.getElementById("emailField");
+  const cb1   = document.getElementById("cb1");
+  const cb2   = document.getElementById("cb2");
+  const cb3   = document.getElementById("cb3");
+
+  // Name
+  if (!name.value.trim()) { showErr("err-name", name); valid = false; }
+  else document.getElementById("err-name").classList.add("hidden");
+
+  // User ID
+  if (!uid.value.trim()) { showErr("err-userid", uid); valid = false; }
+  else document.getElementById("err-userid").classList.add("hidden");
+
+  // Reason
+  if (!selectedReason) { showErr("err-reason", document.getElementById("reasonGrid")); valid = false; }
+  else document.getElementById("err-reason").classList.add("hidden");
+
+  // Email
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email.value.trim() || !emailRx.test(email.value.trim())) { showErr("err-email", email); valid = false; }
+  else document.getElementById("err-email").classList.add("hidden");
+
+  // Checkboxes
+  if (!cb1.checked || !cb2.checked || !cb3.checked) {
+    document.getElementById("err-checkboxes").classList.remove("hidden");
+    valid = false;
+  } else document.getElementById("err-checkboxes").classList.add("hidden");
+
+  // Confirm phrase
+  if (confirmInput.value.trim().toUpperCase() !== TARGET) {
+    showErr("err-confirm", confirmInput);
+    valid = false;
+  } else document.getElementById("err-confirm").classList.add("hidden");
+
+  if (!valid) { e.preventDefault(); return; }
+
+  // Show success overlay after brief delay (FormSubmit processes in background)
+  setTimeout(() => {
+    document.getElementById("success-overlay").classList.remove("hidden");
+  }, 600);
+});
+
+// ── Close overlay ──────────────────────────────────────────────────────
+document.getElementById("success-overlay").addEventListener("click", function(e) {
+  if (e.target === this) this.classList.add("hidden");
+});
+
+function goBack() { window.history.back(); }
+</script>
+
+</body>
+</html>
